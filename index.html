@@ -6,118 +6,119 @@
 <title>Vice City 3D: Neon Stories</title>
 <style>
   * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
-  body { margin: 0; overflow: hidden; background: #090314; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  body { margin: 0; overflow: hidden; background: #140824; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
   
-  /* HUD Superior Derecho */
+  #error-msg {
+    display: none; position: absolute; inset: 0; background: #140824; color: #ff2a85;
+    padding: 30px; text-align: center; font-size: 18px; z-index: 999;
+    align-items: center; justify-content: center; flex-direction: column;
+  }
+
   #hud {
     position: absolute; top: 15px; right: 20px; text-align: right; color: #fff;
     text-shadow: 2px 2px 6px #000; pointer-events: none; z-index: 5;
   }
-  .stat { font-size: 20px; font-weight: 800; margin-bottom: 6px; letter-spacing: 1px; }
-  #health-bar { width: 170px; height: 14px; background: rgba(80,0,20,0.8); border: 2px solid #fff; border-radius: 4px; display: inline-block; overflow: hidden; vertical-align: middle; }
-  #health-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ff2a85, #ff77aa); transition: width 0.2s; }
+  .stat { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  #health-bar { width: 150px; height: 14px; background: #400; border: 2px solid #fff; border-radius: 4px; display: inline-block; overflow: hidden; vertical-align: middle; }
+  #health-fill { width: 100%; height: 100%; background: #ff2a85; transition: width 0.2s; }
   #cash { color: #00ff88; font-size: 24px; }
-  #stars { color: #ffde00; font-size: 24px; letter-spacing: 2px; }
-  #weapon-tag { font-size: 13px; color: #00f0ff; text-transform: uppercase; }
+  #stars { color: #ffde00; font-size: 22px; letter-spacing: 2px; }
+  #weapon-tag { font-size: 12px; color: #00f0ff; }
 
-  /* Controles PC */
   #controls {
-    position: absolute; top: 15px; left: 20px; color: #eee; background: rgba(15, 5, 30, 0.75);
+    position: absolute; top: 15px; left: 20px; color: #eee; background: rgba(15, 5, 30, 0.8);
     border: 1px solid rgba(0, 240, 255, 0.3); padding: 10px 14px; border-radius: 8px;
     font-size: 12px; line-height: 1.6; pointer-events: none; z-index: 5;
   }
 
-  /* Minimapa Radar */
   #radar-container {
-    position: absolute; bottom: 20px; left: 20px; width: 140px; height: 140px;
+    position: absolute; bottom: 20px; left: 20px; width: 130px; height: 130px;
     border-radius: 50%; border: 3px solid #00f0ff; background: rgba(10, 5, 25, 0.85);
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5); overflow: hidden; z-index: 5;
+    overflow: hidden; z-index: 5;
   }
   #radar { width: 100%; height: 100%; }
 
-  /* Caja de Historia / Misiones */
   #mission-box {
     position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-    background: rgba(12, 4, 28, 0.9); border: 2px solid #ff2a85; border-radius: 10px;
-    padding: 12px 22px; color: #fff; text-align: center; width: 90%; max-width: 520px;
-    box-shadow: 0 0 25px rgba(255, 42, 133, 0.4); z-index: 5; pointer-events: none;
+    background: rgba(12, 4, 28, 0.92); border: 2px solid #ff2a85; border-radius: 10px;
+    padding: 10px 20px; color: #fff; text-align: center; width: 90%; max-width: 500px;
+    z-index: 5; pointer-events: none;
   }
-  #mission-speaker { color: #00f0ff; font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; }
-  #mission-title { color: #ff2a85; font-weight: 900; font-size: 16px; margin: 2px 0; }
-  #mission-text { font-size: 14px; color: #e0e0e0; }
+  #mission-speaker { color: #00f0ff; font-weight: bold; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; }
+  #mission-title { color: #ff2a85; font-weight: 900; font-size: 15px; margin: 2px 0; }
+  #mission-text { font-size: 13px; color: #e0e0e0; }
 
-  /* Pantalla Game Over */
   #gameover {
-    display: none; position: absolute; inset: 0; background: rgba(5, 0, 15, 0.9);
+    display: none; position: absolute; inset: 0; background: rgba(5, 0, 15, 0.92);
     color: #ff2a85; flex-direction: column; align-items: center; justify-content: center;
-    font-size: 46px; font-weight: 900; z-index: 20; text-align: center;
+    font-size: 42px; font-weight: 900; z-index: 20; text-align: center;
   }
   #gameover button {
     margin-top: 20px; padding: 12px 28px; font-size: 18px; font-weight: bold;
     background: #00f0ff; color: #090314; border: none; border-radius: 6px; cursor: pointer;
   }
 
-  /* Controles Táctiles para Móvil */
   #mobile-controls {
     display: none; position: absolute; inset: 0; pointer-events: none; z-index: 10;
   }
   .touch-pad {
-    position: absolute; bottom: 175px; left: 20px; width: 120px; height: 120px;
+    position: absolute; bottom: 160px; left: 20px; width: 120px; height: 120px;
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; pointer-events: auto;
   }
   .touch-actions {
-    position: absolute; bottom: 175px; right: 20px; display: flex; flex-direction: column; gap: 10px; pointer-events: auto;
+    position: absolute; bottom: 160px; right: 20px; display: flex; flex-direction: column; gap: 10px; pointer-events: auto;
   }
   .t-btn {
-    background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(0, 240, 255, 0.6);
+    background: rgba(255, 255, 255, 0.2); border: 1px solid #00f0ff;
     color: #fff; font-weight: bold; border-radius: 8px; display: flex; align-items: center;
-    justify-content: center; font-size: 14px; touch-action: manipulation;
+    justify-content: center; font-size: 13px; touch-action: manipulation;
   }
-  .t-btn:active { background: rgba(255, 42, 133, 0.6); }
-  .action-btn { width: 75px; height: 48px; }
+  .t-btn:active { background: rgba(255, 42, 133, 0.7); }
+  .action-btn { width: 80px; height: 48px; }
 
   @media (max-width: 768px) {
     #controls { display: none; }
     #mobile-controls { display: block; }
-    #radar-container { width: 100px; height: 100px; top: 15px; bottom: auto; left: 15px; }
-    #mission-box { bottom: 12px; padding: 8px 14px; }
+    #radar-container { width: 95px; height: 95px; top: 15px; bottom: auto; left: 15px; }
+    #mission-box { bottom: 10px; padding: 8px 12px; }
   }
 </style>
 </head>
 <body>
+
+<div id="error-msg"></div>
 
 <div id="controls">
   <b>VICE CITY 3D — CONTROLES</b><br>
   <b>W A S D / Flechas:</b> Caminar / Conducir<br>
   <b>Clic / F:</b> Disparar pistola neón<br>
   <b>E / Enter:</b> Subir o bajar de vehículo<br>
-  <b>R:</b> Reparar coche / Curarse ($200)
+  <b>R:</b> Curarse ($200)
 </div>
 
 <div id="hud">
   <div class="stat">VIDA <div id="health-bar"><div id="health-fill"></div></div></div>
   <div class="stat" id="cash">$500</div>
   <div class="stat" id="stars">☆☆☆☆☆</div>
-  <div id="weapon-tag">ARMA: PISTOLA NEÓN</div>
+  <div id="weapon-tag">PISTOLA NEÓN</div>
 </div>
 
 <div id="radar-container">
-  <canvas id="radar" width="140" height="140"></canvas>
+  <canvas id="radar" width="130" height="130"></canvas>
 </div>
 
 <div id="mission-box">
   <div id="mission-speaker">LUCÍA (CONTACTO)</div>
   <div id="mission-title">CAPÍTULO 1: EL ENCUENTRO</div>
-  <div id="mission-text">Acércate al marcador cian en la plaza central para recibir tu primer encargo.</div>
+  <div id="mission-text">Acércate al círculo cian en la plaza central para empezar.</div>
 </div>
 
 <div id="gameover">
   ELIMINADO
-  <div style="font-size:18px; color:#fff; margin-top:8px;">La policía de Vice City te ha neutralizado</div>
+  <div style="font-size:16px; color:#fff; margin-top:8px;">La policía te ha neutralizado</div>
   <button onclick="location.reload()">VOLVER A JUGAR</button>
 </div>
 
-<!-- Controles Móvil -->
 <div id="mobile-controls">
   <div class="touch-pad">
     <div></div><div class="t-btn" data-key="w">▲</div><div></div>
@@ -129,132 +130,141 @@
   </div>
 </div>
 
-<script src="https://cloudflare.com"></script>
+<!-- Carga de Three.js desde servidor global de alta disponibilidad -->
+<script src="https://unpkg.com"></script>
+
 <script>
-// --- CONFIGURACIÓN DE ESCENA ---
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x140824);
-scene.fog = new THREE.FogExp2(0x140824, 0.009);
+window.addEventListener("load", function() {
+  const errBox = document.getElementById("error-msg");
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 350);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-document.body.appendChild(renderer.domElement);
-
-// --- ILUMINACIÓN VICE CITY ---
-scene.add(new THREE.HemisphereLight(0xff66aa, 0x1b1b3a, 1.2));
-const sunLight = new THREE.DirectionalLight(0xffaa55, 1.0);
-sunLight.position.set(60, 100, 40);
-scene.add(sunLight);
-
-// --- SUELO Y CALLES ---
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(400, 400),
-  new THREE.MeshStandardMaterial({ color: 0x1c1c24, roughness: 0.8 })
-);
-ground.rotation.x = -Math.PI / 2;
-scene.add(ground);
-
-// Líneas de carretera
-const roadMat = new THREE.MeshBasicMaterial({ color: 0x333344 });
-for (let i = -120; i <= 120; i += 40) {
-  const r1 = new THREE.Mesh(new THREE.PlaneGeometry(260, 8), roadMat);
-  r1.rotation.x = -Math.PI / 2; r1.position.set(0, 0.02, i);
-  scene.add(r1);
-
-  const r2 = new THREE.Mesh(new THREE.PlaneGeometry(8, 260), roadMat);
-  r2.rotation.x = -Math.PI / 2; r2.position.set(i, 0.02, 0);
-  scene.add(r2);
-}
-
-// --- EDIFICIOS Y PALMERAS ---
-const buildings = [];
-const neonPalette = [0xff2a85, 0x00f0ff, 0xffde00, 0x9d00ff, 0x00ff88];
-
-for (let x = -100; x <= 100; x += 40) {
-  for (let z = -100; z <= 100; z += 40) {
-    if (Math.abs(x) < 25 && Math.abs(z) < 25) continue; // Plaza central
-    const w = 22, d = 22, h = 14 + Math.random() * 32;
-    const bMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(w, h, d),
-      new THREE.MeshStandardMaterial({ color: 0x120d21 })
-    );
-    bMesh.position.set(x, h / 2, z);
-    scene.add(bMesh);
-    buildings.push({ x, z, halfW: w / 2 + 1.2, halfD: d / 2 + 1.2 });
-
-    // Cartel neón superior
-    const neonColor = neonPalette[Math.floor(Math.random() * neonPalette.length)];
-    const neonTrim = new THREE.Mesh(
-      new THREE.BoxGeometry(w + 0.5, 0.8, d + 0.5),
-      new THREE.MeshBasicMaterial({ color: neonColor })
-    );
-    neonTrim.position.set(x, h - 1, z);
-    scene.add(neonTrim);
+  if (typeof THREE === "undefined") {
+    errBox.style.display = "flex";
+    errBox.innerHTML = "<b>Error de conexión:</b> No se pudo descargar el motor 3D. Comprueba tu conexión a internet y recarga la página.";
+    return;
   }
-}
 
-// --- GENERADOR DE PERSONAJES ---
-function createCharacter(shirtColor, pantsColor, hasHat = false) {
-  const group = new THREE.Group();
-  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.15, 0.5), new THREE.MeshStandardMaterial({ color: shirtColor }));
-  torso.position.y = 1.45;
-  const head = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.55, 0.55), new THREE.MeshStandardMaterial({ color: 0xf1c27d }));
-  head.position.y = 2.35;
-  const legs = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.85, 0.45), new THREE.MeshStandardMaterial({ color: pantsColor }));
-  legs.position.y = 0.42;
-  group.add(torso, head, legs);
-
-  if (hasHat) {
-    const hat = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.2, 0.65), new THREE.MeshStandardMaterial({ color: 0x111111 }));
-    hat.position.y = 2.7;
-    group.add(hat);
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "default" });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+  } catch (e) {
+    errBox.style.display = "flex";
+    errBox.innerHTML = "<b>Gráficos 3D no soportados:</b> Tu navegador tiene WebGL desactivado.";
+    return;
   }
-  scene.add(group);
-  return group;
-}
 
-const player = {
-  mesh: createCharacter(0xff2a85, 0x1a1a2e),
-  health: 100, cash: 500, wanted: 0, inCar: null, speed: 0.26, lastShot: 0
-};
-player.mesh.position.set(0, 0, 8);
+  // --- ESCENA Y CÁMARA ---
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a0b2e);
+  scene.fog = new THREE.FogExp2(0x1a0b2e, 0.008);
 
-// --- GENERADOR DE VEHÍCULOS ---
-const cars = [];
-function createVehicle(x, z, color, type = "sport") {
-  const group = new THREE.Group();
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(2.5, 1.0, 4.8),
-    new THREE.MeshStandardMaterial({ color, metalness: 0.4, roughness: 0.3 })
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
+
+  // --- LUCES ---
+  scene.add(new THREE.HemisphereLight(0xff77aa, 0x222244, 1.3));
+  const sunLight = new THREE.DirectionalLight(0xffaa55, 1.0);
+  sunLight.position.set(50, 100, 40);
+  scene.add(sunLight);
+
+  // --- SUELO Y CALLES ---
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(360, 360),
+    new THREE.MeshLambertMaterial({ color: 0x22222c })
   );
-  body.position.y = 0.75;
-  const cabin = new THREE.Mesh(
-    new THREE.BoxGeometry(2.1, 0.8, 2.5),
-    new THREE.MeshStandardMaterial({ color: 0x0b0b12 })
-  );
-  cabin.position.set(0, 1.55, -0.2);
-  group.add(body, cabin);
+  ground.rotation.x = -Math.PI / 2;
+  scene.add(ground);
 
-  if (type === "cop") {
-    const siren = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.25, 0.4), new THREE.MeshBasicMaterial({ color: 0xff0033 }));
-    siren.position.set(0, 2.05, -0.2);
-    group.add(siren);
+  const roadMat = new THREE.MeshBasicMaterial({ color: 0x383848 });
+  for (let i = -120; i <= 120; i += 40) {
+    const r1 = new THREE.Mesh(new THREE.PlaneGeometry(260, 8), roadMat);
+    r1.rotation.x = -Math.PI / 2; r1.position.set(0, 0.03, i);
+    scene.add(r1);
+
+    const r2 = new THREE.Mesh(new THREE.PlaneGeometry(8, 260), roadMat);
+    r2.rotation.x = -Math.PI / 2; r2.position.set(i, 0.03, 0);
+    scene.add(r2);
   }
-  group.position.set(x, 0, z);
-  scene.add(group);
 
-  const carObj = { mesh: group, speed: 0, type, aiDir: Math.floor(Math.random() * 4) * (Math.PI / 2) };
-  cars.push(carObj);
+  // --- EDIFICIOS NEÓN ---
+  const buildings = [];
+  const neonPalette = [0xff2a85, 0x00f0ff, 0xffde00, 0x9d00ff, 0x00ff88];
+
+  for (let x = -100; x <= 100; x += 40) {
+    for (let z = -100; z <= 100; z += 40) {
+      if (Math.abs(x) < 25 && Math.abs(z) < 25) continue;
+      const w = 22, d = 22, h = 14 + Math.random() * 28;
+      const bMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(w, h, d),
+        new THREE.MeshLambertMaterial({ color: 0x151026 })
+      );
+      bMesh.position.set(x, h / 2, z);
+      scene.add(bMesh);
+      buildings.push({ x, z, halfW: w / 2 + 1.2, halfD: d / 2 + 1.2 });
+
+      const neonColor = neonPalette[Math.floor(Math.random() * neonPalette.length)];
+      const neonTrim = new THREE.Mesh(
+        new THREE.BoxGeometry(w + 0.5, 0.8, d + 0.5),
+        new THREE.MeshBasicMaterial({ color: neonColor })
+      );
+      neonTrim.position.set(x, h - 1, z);
+      scene.add(neonTrim);
+    }
+  }
+
+  // --- PERSONAJES ---
+  function createCharacter(shirtColor, pantsColor, hasHat) {
+    const group = new THREE.Group();
+    const torso = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.15, 0.5), new THREE.MeshLambertMaterial({ color: shirtColor }));
+    torso.position.y = 1.45;
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.55, 0.55), new THREE.MeshLambertMaterial({ color: 0xf1c27d }));
+    head.position.y = 2.35;
+    const legs = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.85, 0.45), new THREE.MeshLambertMaterial({ color: pantsColor }));
+    legs.position.y = 0.42;
+    group.add(torso, head, legs);
+
+    if (hasHat) {
+      const hat = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.2, 0.65), new THREE.MeshLambertMaterial({ color: 0x111111 }));
+      hat.position.y = 2.7;
+      group.add(hat);
+    }
+    scene.add(group);
+    return group;
+  }
+
+  const player = {
+    mesh: createCharacter(0xff2a85, 0x1a1a2e, false),
+    health: 100, cash: 500, wanted: 0, inCar: null, speed: 0.26, lastShot: 0
+  };
+  player.mesh.position.set(0, 0, 8);
+
+  // --- VEHÍCULOS ---
+  const cars = [];
+  function createVehicle(x, z, color, type) {
+    const group = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 1.0, 4.8), new THREE.MeshLambertMaterial({ color }));
+    body.position.y = 0.75;
+    const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.1, 0.8, 2.5), new THREE.MeshLambertMaterial({ color: 0x0b0b12 }));
+    cabin.position.set(0, 1.55, -0.2);
+    group.add(body, cabin);
+
+    if (type === "cop") {
+const siren = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.25, 0.4), new THREE.MeshBasicMaterial({ color: 0xff0033 }));
+siren.position.set(0, 2.05, -0.2);
+group.add(siren);
+}
+group.position.set(x, 0, z);
+scene.add(group);
+const carObj = { mesh: group, speed: 0, type, aiDir: Math.floor(Math.random() * 4) * (Math.PI / 2) };
+cars.push(carObj);
 return carObj;
 }
-createVehicle(10, 4, 0x00f0ff, "sport");   // Deportivo jugador
-createVehicle(-14, -10, 0xffde00, "sport"); // Deportivo amarillo
-createVehicle(40, 0, 0xffffff, "cop");      // Patrulla
-createVehicle(-40, 40, 0x9d00ff, "traffic"); // Tráfico
-createVehicle(80, -40, 0x00ff88, "traffic"); // Tráfico
-// --- NPCS (PEATONES, POLICÍAS Y ENEMIGOS) ---
+createVehicle(10, 4, 0x00f0ff, "sport");
+createVehicle(-14, -10, 0xffde00, "sport");
+createVehicle(40, 0, 0xffffff, "cop");
+createVehicle(-40, 40, 0x9d00ff, "traffic");
+createVehicle(80, -40, 0x00ff88, "traffic");
+// --- NPCS ---
 const npcs = [];
 function spawnNPC(x, z, role) {
 let color = 0x00f0ff, hat = false;
@@ -267,39 +277,38 @@ const npc = { mesh, role, hp: role === "enemy" ? 60 : 30, alive: true, dir: Math
 npcs.push(npc);
 return npc;
 }
-for (let i = 0; i < 20; i++) {
-const role = i < 5 ? "cop" : "civilian";
-spawnNPC((Math.random() - 0.5) * 160, (Math.random() - 0.5) * 160, role);
+for (let i = 0; i < 18; i++) {
+spawnNPC((Math.random() - 0.5) * 150, (Math.random() - 0.5) * 150, i < 5 ? "cop" : "civilian");
 }
-// --- PROYECTILES / BALAS ---
+// --- DISPAROS ---
 const bullets = [];
 function shootBullet(origin, angle, isPlayer) {
 const bMesh = new THREE.Mesh(
-new THREE.SphereGeometry(0.22, 8, 8),
+new THREE.SphereGeometry(0.24, 6, 6),
 new THREE.MeshBasicMaterial({ color: isPlayer ? 0x00f0ff : 0xff0044 })
 );
 bMesh.position.copy(origin).add(new THREE.Vector3(Math.sin(angle) * 1.2, 1.4, Math.cos(angle) * 1.2));
 scene.add(bMesh);
-bullets.push({ mesh: bMesh, vx: Math.sin(angle) * 1.4, vz: Math.cos(angle) * 1.4, isPlayer, life: 65 });
+bullets.push({ mesh: bMesh, vx: Math.sin(angle) * 1.4, vz: Math.cos(angle) * 1.4, isPlayer, life: 60 });
 }
-// --- SISTEMA DE HISTORIA (4 CAPÍTULOS) ---
+// --- HISTORIA ---
 let chapter = 0;
 const marker = new THREE.Mesh(
-new THREE.CylinderGeometry(2.2, 2.2, 0.25, 24),
-new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.75 })
+new THREE.CylinderGeometry(2.2, 2.2, 0.25, 20),
+new THREE.MeshBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.8 })
 );
 marker.position.set(0, 0.12, -10);
 scene.add(marker);
-const luciaNPC = createCharacter(0xffffff, 0xff2a85);
+const luciaNPC = createCharacter(0xffffff, 0xff2a85, false);
 luciaNPC.position.set(0, 0, -12.5);
-function setStory(speaker, title, text, mx, mz, color = 0x00f0ff) {
+function setStory(speaker, title, text, mx, mz, color) {
 document.getElementById("mission-speaker").innerText = speaker;
 document.getElementById("mission-title").innerText = title;
 document.getElementById("mission-text").innerText = text;
 marker.position.set(mx, 0.12, mz);
 marker.material.color.setHex(color);
 }
-// --- CONTROLES E INTERACCIÓN ---
+// --- CONTROLES ---
 const keys = {};
 window.addEventListener("keydown", e => {
 const k = e.key.toLowerCase();
@@ -310,7 +319,6 @@ if (k === "r") healAndRepair();
 });
 window.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
 window.addEventListener("mousedown", e => { if (e.button === 0) playerShoot(); });
-// Botones táctiles móvil
 document.querySelectorAll(".t-btn[data-key]").forEach(btn => {
 const k = btn.getAttribute("data-key");
 btn.addEventListener("touchstart", e => { e.preventDefault(); keys[k] = true; });
@@ -360,44 +368,33 @@ if (Math.abs(x - b.x) < b.halfW && Math.abs(z - b.z) < b.halfD) return true;
 }
 return false;
 }
-// --- MINIMAPA RADAR ---
 const radarCtx = document.getElementById("radar").getContext("2d");
 function drawRadar(activePos) {
-radarCtx.clearRect(0, 0, 140, 140);
-const scale = 0.65;
-const cx = 70, cy = 70;
-// Edificios
+radarCtx.clearRect(0, 0, 130, 130);
+const scale = 0.6, cx = 65, cy = 65;
 radarCtx.fillStyle = "rgba(255, 255, 255, 0.15)";
 for (let b of buildings) {
-const rx = cx + (b.x - activePos.x) * scale;
-const ry = cy + (b.z - activePos.z) * scale;
-radarCtx.fillRect(rx - 7, ry - 7, 14, 14);
+radarCtx.fillRect(cx + (b.x - activePos.x) * scale - 6, cy + (b.z - activePos.z) * scale - 6, 12, 12);
 }
-// NPCs / Policías / Enemigos
 for (let n of npcs) {
 if (!n.alive) continue;
 radarCtx.fillStyle = n.role === "cop" ? "#3b82f6" : (n.role === "enemy" ? "#ef4444" : "#aaa");
-const rx = cx + (n.mesh.position.x - activePos.x) * scale;
-const ry = cy + (n.mesh.position.z - activePos.z) * scale;
-radarCtx.fillRect(rx - 2, ry - 2, 4, 4);
+radarCtx.fillRect(cx + (n.mesh.position.x - activePos.x) * scale - 2, cy + (n.mesh.position.z - activePos.z) * scale - 2, 4, 4);
 }
-// Objetivo Misión
 if (marker.visible) {
 radarCtx.fillStyle = "#00ff88";
 radarCtx.beginPath();
 radarCtx.arc(cx + (marker.position.x - activePos.x) * scale, cy + (marker.position.z - activePos.z) * scale, 5, 0, Math.PI * 2);
 radarCtx.fill();
 }
-// Jugador en el centro
 radarCtx.fillStyle = "#ff2a85";
 radarCtx.beginPath(); radarCtx.arc(cx, cy, 4, 0, Math.PI * 2); radarCtx.fill();
 }
-// --- BUCLE PRINCIPAL ---
+// --- BUCLE DEL JUEGO ---
 function animate() {
 requestAnimationFrame(animate);
 if (player.health <= 0) return;
 const activeObj = player.inCar ? player.inCar.mesh : player.mesh;
-// Movimiento Jugador / Coche
 if (player.inCar) {
 const c = player.inCar;
 if (keys["w"] || keys["arrowup"]) c.speed = Math.min(c.speed + 0.025, 0.85);
@@ -427,10 +424,9 @@ const nz = player.mesh.position.z + Math.cos(ang) * player.speed;
 if (!isBlocked(nx, nz)) player.mesh.position.set(nx, 0, nz);
 }
 }
-// Tráfico IA
 for (let c of cars) {
 if (c === player.inCar) continue;
-const spd = (c.type === "cop" && player.wanted > 0) ? 0.35 : 0.18;
+const spd = (c.type === "cop" && player.wanted > 0) ? 0.34 : 0.18;
 if (c.type === "cop" && player.wanted > 0) {
 c.aiDir = Math.atan2(activeObj.position.x - c.mesh.position.x, activeObj.position.z - c.mesh.position.z);
 }
@@ -440,7 +436,6 @@ const nz = c.mesh.position.z + Math.cos(c.aiDir) * spd;
 if (!isBlocked(nx, nz)) c.mesh.position.set(nx, 0, nz);
 else c.aiDir += Math.PI / 2;
 }
-// Balas y colisiones
 for (let i = bullets.length - 1; i >= 0; i--) {
 const b = bullets[i];
 b.mesh.position.x += b.vx;
@@ -472,11 +467,9 @@ scene.remove(b.mesh);
 bullets.splice(i, 1);
 }
 }
-// IA de NPCs (Peatones, Policías y Banda Rival)
 for (let n of npcs) {
 if (!n.alive) continue;
 const distToPlayer = n.mesh.position.distanceTo(activeObj.position);
-// Atropello con coche
 if (player.inCar && Math.abs(player.inCar.speed) > 0.25 && distToPlayer < 2.3) {
 n.alive = false;
 n.mesh.rotation.x = Math.PI / 2;
@@ -507,12 +500,11 @@ if (!isBlocked(nx, nz)) { n.mesh.position.set(nx, 0, nz); n.mesh.rotation.y = n.
 else n.dir += Math.PI;
 }
 }
-// Progreso de la Historia (4 Capítulos)
 const distMarker = activeObj.position.distanceTo(marker.position);
 if (chapter === 0 && distMarker < 3.5) {
 chapter = 1;
 spawnNPC(60, -55, "enemy"); spawnNPC(55, -62, "enemy"); spawnNPC(65, -60, "enemy");
-setStory("LUCÍA", "CAPÍTULO 2: EMBOSCADA EN EL NORTE", "Una banda rival tiene el maletín en el distrito norte. Elimínalos (Clic/F) y recoge el dinero.", 60, -60, 0xffde00);
+setStory("LUCÍA", "CAPÍTULO 2: EMBOSCADA EN EL NORTE", "Una banda rival tiene el maletín en el norte. Elimínalos (Clic/F) y recoge el dinero.", 60, -60, 0xffde00);
 } else if (chapter === 1 && distMarker < 3.5) {
 chapter = 2;
 player.cash += 3000;
@@ -528,9 +520,8 @@ setStory("LUCÍA", "CAPÍTULO 4: EL REGRESO DEL JEFE", "Has limpiado tu rastro. 
 } else if (chapter === 3 && distMarker < 3.5) {
 chapter = 4;
 marker.visible = false;
-setStory("MODO LIBRE DESBLOQUEADO", "¡HISTORIA COMPLETADA!", "Eres el dueño de Vice City. Explora, conduce o enfréntate a la policía libremente.", 0, 0);
+setStory("MODO LIBRE DESBLOQUEADO", "¡HISTORIA COMPLETADA!", "Eres el dueño de Vice City. Explora, conduce o enfréntate a la policía libremente.", 0, 0, 0x00f0ff);
 }
-// Cámara suave en tercera persona
 const camTarget = activeObj.position.clone().add(new THREE.Vector3(0, 9, 15));
 camera.position.lerp(camTarget, 0.1);
 camera.lookAt(activeObj.position.clone().add(new THREE.Vector3(0, 1.5, 0)));
@@ -543,3 +534,4 @@ camera.updateProjectionMatrix();
 renderer.setSize(window.innerWidth, window.innerHeight);
 });
 animate();
+});
